@@ -14,8 +14,41 @@ export class UserService {
     return this.http.post(this.url+'api/login',data);
   }
 
-  setToken(token: string) {
-    localStorage.setItem('token', token);
+  setToken(token: any) {
+    localStorage.setItem('token', token.token);
   }
+
+  getToken() {
+    return localStorage.getItem('token');
+  }
+
+  deleteToken() {
+    localStorage.removeItem('token');
+  }
+
+  getUserPayload() {
+    var token = this.getToken();
+    if (token) {
+      try{
+        var userPayload = atob(token.split('.')[1]);
+        return JSON.parse(userPayload);
+      }
+      catch(err){
+        return null;
+      }
+    }
+    else
+      return null;
+  }
+
+  isLoggedIn() {
+    var userPayload = this.getUserPayload();
+    if (userPayload)
+      return userPayload.exp > Date.now() / 1000;
+    else
+      return false;
+  }
+
+  
 
 }

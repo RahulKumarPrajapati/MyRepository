@@ -17,21 +17,41 @@ export class LoginComponent implements OnInit {
   user: User = {
     username: '',
     email: '',
-    password: ''
+    password: '',
+    role: ''
   }
+  
   serverErrorMsg = '';
+  hastoken = false;
+  token : any;
+  isauthenticated = false;
   ngOnInit(): void {
+    this.token = this.userService.getToken();
+    if(this.token){
+      if(this.userService.isLoggedIn()){
+        this.isauthenticated = true
+        this.router.navigateByUrl('/');
+
+      }
+      else{
+        this.router.navigateByUrl('/login');
+      }
+      
+    }
+    else{
+      this.router.navigateByUrl('/login');
+    }
   }
+
 
   authenticate(data:NgForm){
     this.userService.login(data).subscribe(
       res => {
-        this.userService.setToken('token');
+        this.userService.setToken(res);
         this.router.navigate(['/'])
       },
       err => {
         this.serverErrorMsg = err.error.message;
-        ;
       })
   }
 

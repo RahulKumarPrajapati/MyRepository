@@ -8,6 +8,7 @@ module.exports.register = (req, res, next) => {
     user.username = req.body.username;
     user.email = req.body.email;
     user.password = req.body.password;
+    user.role = req.body.role;
     user.save((err, doc) => {
         if (!err)
             res.send(doc);
@@ -36,6 +37,7 @@ module.exports.login = (req, res, next) => {
 module.exports.user = (req, res, next) =>{
     User.findOne({ _id: req._id },
         (err, user) => {
+            console.log(user);
             if (!user)
                 return res.status(404).json({ status: false, message: 'User record not found.' });
             else

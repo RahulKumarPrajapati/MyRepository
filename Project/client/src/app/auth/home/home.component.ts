@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { UserService } from '../../shared/user.service';
 
 @Component({
   selector: 'app-home',
@@ -9,18 +10,30 @@ import { Router } from '@angular/router';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private http: HttpClient, private router: Router) { }
-  url ="http://localhost:3000/";;
+  constructor(private userService: UserService, private router: Router, private http: HttpClient) { }
+
+  hastoken = false;
+  token : any;
+  isauthenticated = false;
+  message = 'Hi ';
+  user:any;
   ngOnInit(): void {
-    this.http.get(this.url+'api/user').subscribe(
-      response => {
-        console.log(response);
-      },
-      error => {
-        console.log(error);
+    this.token = this.userService.getToken();
+    if(this.token){
+      if(this.userService.isLoggedIn()){
+        this.isauthenticated = true
+        this.user =  this.userService.getUserPayload();
+        this.message = 'Hi '+ this.user.username+ ' your are '+this.user.role;
+      }
+      else{
+        this.router.navigateByUrl('/login');
       }
       
-    )
+    }
+    else{
+      this.router.navigateByUrl('/login');
+    }
   }
+
 
 }
