@@ -29,4 +29,10 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  logout(){
+    this.userService.deleteToken();
+    this.isauthenticated = false;
+    this.router.navigateByUrl('/login');
+  }
+
 }
