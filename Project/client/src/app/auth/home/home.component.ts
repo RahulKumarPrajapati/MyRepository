@@ -15,8 +15,9 @@ export class HomeComponent implements OnInit {
   hastoken = false;
   token : any;
   isauthenticated = false;
-  message = 'Hi ';
+  message = '';
   user:any;
+  taskData: any;
   ngOnInit(): void {
     this.token = this.userService.getToken();
     if(this.token){
@@ -24,6 +25,15 @@ export class HomeComponent implements OnInit {
         this.isauthenticated = true
         this.user =  this.userService.getUserPayload();
         this.message = 'Hi '+ this.user.username+ ' your are '+this.user.role;
+        this.http.get('http://localhost:3000/api/task/findTaskById/'+this.user._id).subscribe(
+          res => {
+            this.taskData = res
+          },
+          err => {
+            console.log(err)
+          }
+        )
+
       }
       else{
         this.router.navigateByUrl('/login');

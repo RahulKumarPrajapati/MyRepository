@@ -9,13 +9,15 @@ import { RegisterComponent } from './auth/register/register.component';
 import { HeaderComponent } from './header/header.component';
 import { HttpClientModule } from '@angular/common/http';
 import { HomeComponent } from './auth/home/home.component';
+import { TaskComponent } from './components/task/task.component';
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
     HeaderComponent,
-    HomeComponent
+    HomeComponent,
+    TaskComponent
   ],
   imports: [
     BrowserModule,
