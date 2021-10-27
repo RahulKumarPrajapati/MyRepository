@@ -2,5 +2,6 @@ export interface Task {
     taskName: string;
     description: string;
     status: string;
-    userId: string
+    assignedBy: string,
+    assignedTo: string
 }

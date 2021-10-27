@@ -31,7 +31,6 @@ export class LoginComponent implements OnInit {
       if(this.userService.isLoggedIn()){
         this.isauthenticated = true
         this.router.navigateByUrl('/');
-
       }
       else{
         this.router.navigateByUrl('/login');

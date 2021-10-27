@@ -11,7 +11,8 @@ const routes: Routes = [
   {path: '', component: HomeComponent},
   {path: 'login', component: LoginComponent},
   {path: 'register', component: RegisterComponent},
-  {path: 'task/add', component: TaskComponent}
+  {path: 'task/add', component: TaskComponent},
+  {path: 'task/edit/:id', component: TaskComponent}
 ];
 
 @NgModule({

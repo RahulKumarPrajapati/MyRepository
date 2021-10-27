@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ParamMap, Router, ActivatedRoute} from '@angular/router';
 import { Task } from '../../shared/task/task.model'
 import { NgForm,FormGroup, FormControl }  from '@angular/forms';
 import { UserService } from 'src/app/shared/user.service';
@@ -12,19 +12,53 @@ import { HttpClient } from '@angular/common/http';
 })
 export class TaskComponent implements OnInit {
 
-  constructor(private router: Router,private userService: UserService, private http: HttpClient) { }
+  constructor(private route: ActivatedRoute, private router: Router,private userService: UserService, private http: HttpClient) { }
   serverErrorMsg = '';
   passOrFail = 'danger';
-  url = "http://localhost:3000/";  message = '';
+  url = "http://localhost:3000/";
+  message = '';
+  user = this.userService.getUserPayload();
   task = new FormGroup({
     taskName: new FormControl(''),
     description: new FormControl(''),
     status: new FormControl(''),
-    userId: new FormControl(this.userService.getUserPayload()["_id"])
-
+    assignedBy: new FormControl(this.userService.getUserPayload()["_id"]),
+    assignedTo: new FormControl('')
   });
+  architectList: any;
+  edit = false;
+  taskId: any;
   ngOnInit(): void {
-    
+    if(this.router.url.includes('/task/edit')){
+      this.route.paramMap.subscribe((params: ParamMap) => {
+        this.taskId = params.get('id');
+      });
+      this.http.get(this.url+'api/task/getTask/'+this.taskId).subscribe(
+        response => {
+          this.task = new FormGroup({
+            _id: new FormControl(Object(response)._id),
+            taskName: new FormControl(Object(response).taskName),
+            description: new FormControl(Object(response).description),
+            status: new FormControl(Object(response).status),
+            assignedBy: new FormControl(this.userService.getUserPayload()["_id"]),
+            assignedTo: new FormControl(Object(response).assignedTo)
+          });
+         }
+      )
+      this.edit = true
+    }
+    else if(this.router.url == '/task/add'){
+      this.edit = false
+
+    }
+    if(this.user.role == 'admin'){
+      this.router.navigate(['/']);
+    }
+    this.http.get(this.url+'api/fetchAllArchitect').subscribe(
+      response => {
+        this.architectList = response;
+       }
+    )
   }
   addTask(){
     this.http.post(this.url+'api/task/add',this.task.value).subscribe(
@@ -38,7 +72,19 @@ export class TaskComponent implements OnInit {
         this.router.navigate(['/task/add'])
         this.serverErrorMsg = 'Some Error Occured! Please Try Again';
         this.passOrFail = 'danger'
+      }
+    )
+  }
 
+  editTask(){
+    this.http.post(this.url+'api/task/edit',this.task.value).subscribe(
+      response => {
+        this.serverErrorMsg = 'Task updated successfully.'; 
+        this.passOrFail = 'success'
+       },
+      err => {
+        this.serverErrorMsg = 'Some Error Occured! Please Try Again';
+        this.passOrFail = 'danger'
       }
     )
   }

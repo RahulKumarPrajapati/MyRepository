@@ -12,9 +12,13 @@ var taskSchema = new mongoose.Schema({
         type: String,
         required: 'Status can\'t be empty',
     },
-    userId: {
+    assignedBy: {
         type: String,
-        required: 'Id can\'t be empty'
+        required: 'Assigned By Id can\'t be empty'
+    },
+    assignedTo: {
+        type: String,
+        required: 'Assigned To Id can\'t be empty'
     }
 });
 

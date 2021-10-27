@@ -9,6 +9,12 @@ router.post('/login', ctrlUser.login);
 router.get('/user',jwtHelper.verifyJwtToken, ctrlUser.user);
 router.get('/task/findTaskById/:id', ctrlTask.findTaskById);
 router.post('/task/add', ctrlTask.add);
+router.get('/fetchAllArchitect', ctrlTask.fetchAllArchitect);
+router.get('/task/findAllTask', ctrlTask.findAllTask);
+router.get('/task/findMyTask/:id', ctrlTask.findMyTask);
+router.get('/task/getTask/:id', ctrlTask.getTask);
+router.post('/task/edit', ctrlTask.edit);
+
 
 module.exports = router;
 
