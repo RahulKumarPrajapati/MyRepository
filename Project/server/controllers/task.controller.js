@@ -24,21 +24,27 @@ module.exports.edit = async(req, res, next) => {
     res.status(200).json({response});
 }
 
+module.exports.delete = async(req, res, next) => {
+    taskId = req.params.id;
+    let response = await Task.taskModel.deleteOne({_id:taskId});
+    res.status(200).json({response});
+}
+
 module.exports.findTaskById = async(req, res, next) => {
     userId = req.params.id;
     let response = await Task.taskModel.find({assignedBy:userId})
-    res.status(200).json({response});
+    res.status(200).json(response);
 }
 
 module.exports.findAllTask = async(req, res, next) => {
     let response = await Task.taskModel.find()
-    res.status(200).json({response});
+    res.status(200).json(response);
 }
 
 module.exports.findMyTask = async(req, res, next) => {
     userId = req.params.id;
     let response = await Task.taskModel.find({assignedTo:userId})
-    res.status(200).json({response});
+    res.status(200).json(response);
 }
 
 module.exports.getTask = async(req, res, next) => {
@@ -49,6 +55,6 @@ module.exports.getTask = async(req, res, next) => {
 
 module.exports.fetchAllArchitect = async(req,res,next) => {
     let response = await User.find({role:'architect'})
-    res.status(200).json({response});
+    res.status(200).json(response);
 }
 

@@ -9,7 +9,7 @@ export class UserService {
 
   constructor(private http: HttpClient) { }
   url = "http://localhost:3000/";
-
+  isauthenticated = false;
   login(data: any) {
     return this.http.post(this.url+'api/login',data);
   }

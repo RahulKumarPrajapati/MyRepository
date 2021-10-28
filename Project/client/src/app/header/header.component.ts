@@ -8,16 +8,15 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(private userService: UserService, private router: Router) { }
+  constructor(public userService: UserService, private router: Router) { }
 
   hastoken = false;
   token : any;
-  isauthenticated = false;
   ngOnInit(): void {
     this.token = this.userService.getToken();
     if(this.token){
       if(this.userService.isLoggedIn()){
-        this.isauthenticated = true
+        this.userService.isauthenticated = true
       }
       else{
         this.router.navigateByUrl('/login');
@@ -31,7 +30,7 @@ export class HeaderComponent implements OnInit {
 
   logout(){
     this.userService.deleteToken();
-    this.isauthenticated = false;
+    this.userService.isauthenticated = false;
     this.router.navigateByUrl('/login');
   }
 

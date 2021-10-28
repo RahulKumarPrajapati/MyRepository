@@ -63,13 +63,11 @@ export class TaskComponent implements OnInit {
   addTask(){
     this.http.post(this.url+'api/task/add',this.task.value).subscribe(
       response => {
-        this.router.navigate(['/task/add'])
         this.serverErrorMsg = 'Task added successfully.'; 
         this.passOrFail = 'success'
-        this.task.reset();
        },
       err => {
-        this.router.navigate(['/task/add'])
+        window.location.reload();
         this.serverErrorMsg = 'Some Error Occured! Please Try Again';
         this.passOrFail = 'danger'
       }
@@ -87,5 +85,15 @@ export class TaskComponent implements OnInit {
         this.passOrFail = 'danger'
       }
     )
+  }
+
+  delete(id:any){
+    if(confirm("Are you sure you want to delete the task?")){
+      this.http.delete(this.url+'api/task/delete/'+id).subscribe(
+        response => {
+          window.location.reload();
+        }
+      )
+    }
   }
 }

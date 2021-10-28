@@ -15,7 +15,7 @@
     <div class="mb-3">
       <label for="assignedTo" class="form-label">Assign To</label>
       <select  formControlName="assignedTo" name="assignedTo" class="form-control">
-        <option *ngFor="let item of architectList.response" value="{{item._id}}">{{ item.username }}</option>
+        <option *ngFor="let item of architectList" value="{{item._id}}">{{ item.username }}</option>
       </select>
     </div>
     <div class="mb-3">
@@ -41,7 +41,7 @@
   <div class="mb-3">
     <label for="assignedTo" class="form-label">Assign To</label>
     <select  formControlName="assignedTo" name="assignedTo" class="form-control">
-      <option *ngFor="let item of architectList.response" value="{{item._id}}">{{ item.username }}</option>
+      <option *ngFor="let item of architectList" value="{{item._id}}">{{ item.username }}</option>
     </select>
   </div>
   <div class="mb-3">

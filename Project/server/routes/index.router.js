@@ -14,6 +14,7 @@ router.get('/task/findAllTask', ctrlTask.findAllTask);
 router.get('/task/findMyTask/:id', ctrlTask.findMyTask);
 router.get('/task/getTask/:id', ctrlTask.getTask);
 router.post('/task/edit', ctrlTask.edit);
+router.delete('/task/delete/:id', ctrlTask.delete);
 
 
 module.exports = router;

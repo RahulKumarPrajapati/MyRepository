@@ -12,14 +12,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let item of taskData.response;index as i">
+            <tr *ngFor="let item of taskData;index as i">
                 <th scope="row">{{ i+1 }}</th>
                 <td>{{ item.taskName }}</td>
                 <td>{{ item.description }}</td>
                 <td *ngIf="item.status=='pending'"><p style="cursor:default;" class="btn btn-danger">{{ item.status }}</p></td>
                 <td *ngIf="item.status=='working'"><p style="cursor:default;" class="btn btn-warning">{{ item.status }}</p></td>
                 <td *ngIf="item.status=='done'"><p style="cursor:default;" class="btn btn-success">{{ item.status }}</p></td>
-                <td><a *ngIf="editTask" routerLink = "/task/edit/{{item._id}}" class="btn btn-primary">Edit</a>  <a *ngIf="deleteTask" style="margin-left:5%" class="btn btn-primary">Delete</a></td>
+                <td><a *ngIf="editTask" routerLink = "/task/edit/{{item._id}}" class="btn btn-primary">Edit</a>  <a *ngIf="deleteTask" style="margin-left:5%" class="btn btn-primary" (click)="deleteMyTask(item._id)">Delete</a></td>
             </tr>
         </tbody>
       </table>

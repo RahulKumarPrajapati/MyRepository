@@ -1,8 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../../shared/user.service';
-
+import { TaskComponent } from '../../components/task/task.component';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -10,22 +10,22 @@ import { UserService } from '../../shared/user.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private userService: UserService, private router: Router, private http: HttpClient) { }
-
+  constructor(private route: ActivatedRoute, public userService: UserService, private router: Router, private http: HttpClient) { }
   hastoken = false;
   token : any;
-  isauthenticated = false;
   message = '';
   user:any;
   taskData: any;
   createTask = false;
   deleteTask = false;
   editTask = false;
+  taskComponent: any;
   ngOnInit(): void {
     this.token = this.userService.getToken();
+    this.taskComponent = new TaskComponent(this.route,this.router,this.userService,this.http);
     if(this.token){
       if(this.userService.isLoggedIn()){
-        this.isauthenticated = true;
+        this.userService.isauthenticated = true;
         this.user =  this.userService.getUserPayload();
         this.message = 'Hi '+ this.user.username+ ' your are '+this.user.role;
         if(this.user.role == 'builder'){
@@ -34,9 +34,6 @@ export class HomeComponent implements OnInit {
           this.http.get('http://localhost:3000/api/task/findTaskById/'+this.user._id).subscribe(
             res => {
               this.taskData = res
-            },
-            err => {
-              this.taskData = {"response":{}}
             }
           )
         }
@@ -45,9 +42,6 @@ export class HomeComponent implements OnInit {
           this.http.get('http://localhost:3000/api/task/findAllTask').subscribe(
             res => {
               this.taskData = res
-            },
-            err => {
-              this.taskData = {"response":{}}
             }
           )
         }
@@ -56,9 +50,6 @@ export class HomeComponent implements OnInit {
           this.http.get('http://localhost:3000/api/task/findMyTask/'+this.user._id).subscribe(
             res => {
               this.taskData = res
-            },
-            err => {
-              this.taskData = {"response":{}}
             }
           )
         }
@@ -74,5 +65,8 @@ export class HomeComponent implements OnInit {
     }
   }
 
+  deleteMyTask(id:any){
+    this.taskComponent.delete(id);
+  }
 
 }
