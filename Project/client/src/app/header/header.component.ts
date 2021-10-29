@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../shared/user.service';
 import { Router } from '@angular/router';
+import { GlobalService } from '../shared/global/global.service';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -8,7 +9,7 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
 
-  constructor(public userService: UserService, private router: Router) { }
+  constructor(public globalService: GlobalService,private userService: UserService, private router: Router) { }
 
   hastoken = false;
   token : any;
@@ -16,7 +17,7 @@ export class HeaderComponent implements OnInit {
     this.token = this.userService.getToken();
     if(this.token){
       if(this.userService.isLoggedIn()){
-        this.userService.isauthenticated = true
+        this.globalService.isauthenticated = true
       }
       else{
         this.router.navigateByUrl('/login');
@@ -30,7 +31,7 @@ export class HeaderComponent implements OnInit {
 
   logout(){
     this.userService.deleteToken();
-    this.userService.isauthenticated = false;
+    this.globalService.isauthenticated = false;
     this.router.navigateByUrl('/login');
   }
 

@@ -4,6 +4,7 @@ import { Task } from '../../shared/task/task.model'
 import { NgForm,FormGroup, FormControl }  from '@angular/forms';
 import { UserService } from 'src/app/shared/user.service';
 import { HttpClient } from '@angular/common/http';
+import { GlobalService } from 'src/app/shared/global/global.service';
 
 @Component({
   selector: 'app-task',
@@ -12,7 +13,7 @@ import { HttpClient } from '@angular/common/http';
 })
 export class TaskComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, private router: Router,private userService: UserService, private http: HttpClient) { }
+  constructor(public globalService: GlobalService,private route: ActivatedRoute, private router: Router,private userService: UserService, private http: HttpClient) { }
   serverErrorMsg = '';
   passOrFail = 'danger';
   url = "http://localhost:3000/";
@@ -63,13 +64,14 @@ export class TaskComponent implements OnInit {
   addTask(){
     this.http.post(this.url+'api/task/add',this.task.value).subscribe(
       response => {
-        this.serverErrorMsg = 'Task added successfully.'; 
-        this.passOrFail = 'success'
+        this.globalService.serverErrorMsg = 'Task added successfully.'; 
+        this.globalService.passOrFail = 'success';
+        this.router.navigate(['/']);
        },
       err => {
-        window.location.reload();
-        this.serverErrorMsg = 'Some Error Occured! Please Try Again';
-        this.passOrFail = 'danger'
+        this.globalService.serverErrorMsg = 'Some Error Occured! Please Try Again';
+        this.globalService.passOrFail = 'danger';
+        this.router.navigate(['/']);
       }
     )
   }
@@ -77,12 +79,14 @@ export class TaskComponent implements OnInit {
   editTask(){
     this.http.post(this.url+'api/task/edit',this.task.value).subscribe(
       response => {
-        this.serverErrorMsg = 'Task updated successfully.'; 
-        this.passOrFail = 'success'
+        this.globalService.serverErrorMsg = 'Task updated successfully.'; 
+        this.globalService.passOrFail = 'success';
+        this.router.navigate(['/']);
        },
       err => {
-        this.serverErrorMsg = 'Some Error Occured! Please Try Again';
-        this.passOrFail = 'danger'
+        this.globalService.serverErrorMsg = 'Some Error Occured! Please Try Again';
+        this.globalService.passOrFail = 'danger';
+        this.router.navigate(['/']);
       }
     )
   }

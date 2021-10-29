@@ -1,4 +1,8 @@
 <p>{{ message }}</p>
+<div class="alert alert-{{globalService.passOrFail}} alert-dismissible fade show" role="alert" *ngIf="globalService.serverErrorMsg">
+    {{ globalService.serverErrorMsg }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
 <button *ngIf="createTask" routerLink = "/task/add" class="btn btn-primary">Create Task</button>
 <div class="container mt-2">
     <table class="table table-striped table-hover">

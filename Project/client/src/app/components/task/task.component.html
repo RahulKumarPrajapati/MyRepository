@@ -1,7 +1,3 @@
-<div class="alert alert-{{passOrFail}} alert-dismissible fade show" role="alert" *ngIf="serverErrorMsg">
-  {{ serverErrorMsg }}
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
 <form [formGroup]="task" (submit)="addTask()" *ngIf="!edit">
     <h3>Add Task</h3>
     <div class="mb-3">

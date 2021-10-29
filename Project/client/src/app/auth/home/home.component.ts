@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../../shared/user.service';
 import { TaskComponent } from '../../components/task/task.component';
+import { GlobalService } from '../../shared/global/global.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -10,7 +11,8 @@ import { TaskComponent } from '../../components/task/task.component';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private route: ActivatedRoute, public userService: UserService, private router: Router, private http: HttpClient) { }
+  constructor(public globalService: GlobalService,private route: ActivatedRoute, public userService: UserService, private router: Router, private http: HttpClient) { }
+  
   hastoken = false;
   token : any;
   message = '';
@@ -20,12 +22,13 @@ export class HomeComponent implements OnInit {
   deleteTask = false;
   editTask = false;
   taskComponent: any;
+
   ngOnInit(): void {
     this.token = this.userService.getToken();
-    this.taskComponent = new TaskComponent(this.route,this.router,this.userService,this.http);
+    this.taskComponent = new TaskComponent(this.globalService,this.route,this.router,this.userService,this.http);
     if(this.token){
       if(this.userService.isLoggedIn()){
-        this.userService.isauthenticated = true;
+        this.globalService.isauthenticated = true;
         this.user =  this.userService.getUserPayload();
         this.message = 'Hi '+ this.user.username+ ' your are '+this.user.role;
         if(this.user.role == 'builder'){
