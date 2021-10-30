@@ -92,12 +92,10 @@ export class TaskComponent implements OnInit {
   }
 
   delete(id:any){
-    if(confirm("Are you sure you want to delete the task?")){
       this.http.delete(this.url+'api/task/delete/'+id).subscribe(
         response => {
           window.location.reload();
         }
       )
-    }
   }
 }

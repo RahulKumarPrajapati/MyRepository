@@ -4,6 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../../shared/user.service';
 import { TaskComponent } from '../../components/task/task.component';
 import { GlobalService } from '../../shared/global/global.service';
+import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -11,7 +13,7 @@ import { GlobalService } from '../../shared/global/global.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(public globalService: GlobalService,private route: ActivatedRoute, public userService: UserService, private router: Router, private http: HttpClient) { }
+  constructor(private modalService: NgbModal, public globalService: GlobalService,private route: ActivatedRoute, public userService: UserService, private router: Router, private http: HttpClient) { }
   
   hastoken = false;
   token : any;
@@ -22,6 +24,8 @@ export class HomeComponent implements OnInit {
   deleteTask = false;
   editTask = false;
   taskComponent: any;
+
+  
 
   ngOnInit(): void {
     this.token = this.userService.getToken();
@@ -68,8 +72,12 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  deleteMyTask(id:any){
-    this.taskComponent.delete(id);
+  deleteMyTask(content:any,id:any){
+    this.modalService.open(content,{ariaLabelledBy: 'modal-basic-title',}).result.then((result) => {
+      if(result == 'Ok'){
+        this.taskComponent.delete(id);
+      }
+    }, (reason) => {});
+    
   }
-
 }
