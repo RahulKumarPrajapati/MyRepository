@@ -4,7 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { UserService } from '../../shared/user.service';
 import { TaskComponent } from '../../components/task/task.component';
 import { GlobalService } from '../../shared/global/global.service';
-import { ModalDismissReasons, NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-home',
@@ -25,8 +25,6 @@ export class HomeComponent implements OnInit {
   editTask = false;
   taskComponent: any;
 
-  
-
   ngOnInit(): void {
     this.token = this.userService.getToken();
     this.taskComponent = new TaskComponent(this.globalService,this.route,this.router,this.userService,this.http);
@@ -35,32 +33,14 @@ export class HomeComponent implements OnInit {
         this.globalService.isauthenticated = true;
         this.user =  this.userService.getUserPayload();
         this.message = 'Hi '+ this.user.username+ ' your are '+this.user.role;
-        if(this.user.role == 'builder'){
-          this.createTask = true;
-          this.editTask = true;
-          this.http.get('http://localhost:3000/api/task/findTaskById/'+this.user._id).subscribe(
-            res => {
-              this.taskData = res
-            }
-          )
-        }
-        else if(this.user.role == 'admin'){
-          this.deleteTask = true;
-          this.http.get('http://localhost:3000/api/task/findAllTask').subscribe(
-            res => {
-              this.taskData = res
-            }
-          )
-        }
-        else if(this.user.role == 'architect'){
-          this.editTask = true;
-          this.http.get('http://localhost:3000/api/task/findMyTask/'+this.user._id).subscribe(
-            res => {
-              this.taskData = res
-            }
-          )
-        }
-
+        this.createTask = this.user.role == 'builder' ? true : false;
+        this.editTask = this.user.role != 'admin' ? true : false;
+        this.deleteTask = this.user.role == 'admin' ? true : false;
+        this.http.get('http://localhost:3000/api/task/findMyTask/'+this.user._id+'/'+this.user.role).subscribe(
+          res => {
+            this.taskData = res
+          }
+        )
       }
       else{
         this.router.navigateByUrl('/login');
